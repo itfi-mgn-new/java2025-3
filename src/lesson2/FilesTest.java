@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
 public class FilesTest {
@@ -25,13 +26,28 @@ public class FilesTest {
 
 		final File	f2 = new File("c:/users/student");
 		final Path	p2 = f2.toPath();
-		
+
 		System.err.println("List(1):"+Arrays.toString(f2.listFiles()));
 
 		try(DirectoryStream<Path> stream = Files.newDirectoryStream(p2)) {
 			for(Path item : stream) {
 				System.err.println("Item="+item);
 			}
+		}
+	}
+	
+	private static void copy(final Path from, final Path to) throws IOException {
+		if (Files.isDirectory(from)) {
+			Files.createDirectory(to);
+			try(DirectoryStream<Path> stream = Files.newDirectoryStream(to)) {
+				for(Path item : stream) {
+					copy(from.resolve(item.getName(item.getNameCount()-1)), 
+						 to.resolve(item.getName(item.getNameCount()-1)));
+				}
+			}
+		}
+		else {
+			Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
 		}
 	}
 }
