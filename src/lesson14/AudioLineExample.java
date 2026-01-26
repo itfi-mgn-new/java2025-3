@@ -1,5 +1,8 @@
 package lesson14;
 
+
+import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -17,8 +20,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class AudioLineExample {
 
 	public static void main(String[] args) throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
-		try(final InputStream 		is = AudioClipExample.class.getResourceAsStream("audio.wav");
-			final AudioInputStream 	audioStream = AudioSystem.getAudioInputStream(is)) {
+//		try(final InputStream 		is = AudioClipExample.class.getResourceAsStream("audio.wav");
+		try(final AudioInputStream 	audioStream = AudioSystem.getAudioInputStream(new File("./src/lesson14/audio.wav"))) {
 	
 			final AudioFormat 		audioFormat = audioStream.getFormat();
 			final DataLine.Info 	info = new DataLine.Info(SourceDataLine.class, audioFormat);
